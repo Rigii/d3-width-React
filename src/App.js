@@ -27,9 +27,11 @@ class App extends Component {
     xhr.send()
   }
   updateData(){
-   
-   if (this.state.windPos+100<window.pageYOffset){
+   if (this.state.windPos+200<window.pageYOffset){
+    console.log('123123123123123')
      this.getUserData(10)
+   }else{
+    return false
    }
  }
 
@@ -42,8 +44,13 @@ componentDidMount(){
   document.addEventListener('scroll', this.updateData)
 }
 
+componentWillUnmount(){
+  document.removeEventListener('scroll', this.updateData)
+}
+
 render() {
-    //console.log(this.state.usersInfo)
+    console.log(this.state.windPos)
+    console.log(window.pageYOffset)
     return (
       <div className="App" style={{display:'inline-block'}}>
       <h1 className='App-header'>Их разыскивает милиция</h1>

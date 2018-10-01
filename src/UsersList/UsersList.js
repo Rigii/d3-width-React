@@ -21,9 +21,14 @@ class Item extends React.Component{
 		if(props.cards==='inline-block'){
 			this.setState({display:'inline-block', photo: props.item.picture.large})
 		}else{this.setState({display:'none', photo: props.item.picture.medium})}
-		
 	}
-
+/*
+	componentDidMount(){
+		let fac=new FastAverageColor()
+		let color=fac.getColor(this.props.item.picture.large)
+		console.log(color)
+	}
+*/
 	render(){
 
 		return (
