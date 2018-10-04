@@ -8,7 +8,8 @@ class App extends Component {
     this.state={
       usersInfo:[],
       cards: 'block',
-      windPos: 0
+      windPos: 0,
+      isLoad: false
     }
     this.getUserData=this.getUserData.bind(this);
     this.updateData=this.updateData.bind(this);
@@ -22,16 +23,17 @@ class App extends Component {
     xhr.onload=function(){
       let data=JSON.parse(xhr.response)
       usersInfo=usersInfo.concat(data.results)
-      this.setState({usersInfo, windPos:window.pageYOffset})
+     this.setState({usersInfo,isLoad:false})
+
     }.bind(this)
     xhr.send()
   }
+
   updateData(){
-   if (this.state.windPos+200<window.pageYOffset){
-    console.log('123123123123123')
+   if (window.pageYOffset+window.innerHeight>document.body.scrollHeight
+   && !this.state.isLoad){
+      this.state.isLoad = true
      this.getUserData(10)
-   }else{
-    return false
    }
  }
 
@@ -39,18 +41,15 @@ class App extends Component {
   this.state.cards=='block'? this.setState({cards:'inline-block', windPos:window.pageYOffset}) :
   this.setState({cards:'block', windPos:window.pageYOffset})
 }
+
 componentDidMount(){
   this.getUserData(10);
-  document.addEventListener('scroll', this.updateData)
-}
-
-componentWillUnmount(){
-  document.removeEventListener('scroll', this.updateData)
+  this.setState({windPos: document.body.scrollHeight});
+ document.addEventListener('scroll', this.updateData)
 }
 
 render() {
-    console.log(this.state.windPos)
-    console.log(window.pageYOffset)
+ //console.log(this.state.usersInfo)
     return (
       <div className="App" style={{display:'inline-block'}}>
       <h1 className='App-header'>Их разыскивает милиция</h1>
