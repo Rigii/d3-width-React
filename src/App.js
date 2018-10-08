@@ -1,39 +1,28 @@
 import React, { Component } from 'react';
 import Item from './UsersList/UsersList.js';
 import './App.css';
+import {bindActionCreators} from 'redux'; //ф-ия привязки actions
+import {connect} from 'react-redux'; // ф-ия привязки стейта из стора к компоненту в props
+import * as pageActions from './actions/PageActions'// импорт actions из PageActions. Доступны как pageActions
+
 
 class App extends Component {
   constructor(props){
     super(props)
     this.state={
-      usersInfo:[],
       cards: 'block',
       windPos: 0,
       isLoad: false
     }
-    this.getUserData=this.getUserData.bind(this);
+
     this.updateData=this.updateData.bind(this);
     this.cardsView=this.cardsView.bind(this);
   }
-
-  getUserData(props){
-    var usersInfo=this.state.usersInfo;
-    let xhr= new XMLHttpRequest();
-    xhr.open('GET', 'https://randomuser.me/api/?results='+props);
-    xhr.onload=function(){
-      let data=JSON.parse(xhr.response)
-      usersInfo=usersInfo.concat(data.results)
-     this.setState({usersInfo,isLoad:false})
-
-    }.bind(this)
-    xhr.send()
-  }
-
   updateData(){
    if (window.pageYOffset+window.innerHeight>document.body.scrollHeight
    && !this.state.isLoad){
-      this.state.isLoad = true
-     this.getUserData(10)
+     this.state.isLoad = true
+     this.props.pageActions.getUserData()
    }
  }
 
@@ -43,28 +32,48 @@ class App extends Component {
 }
 
 componentDidMount(){
-  this.getUserData(10);
-  this.setState({windPos: document.body.scrollHeight});
- document.addEventListener('scroll', this.updateData)
+this.props.pageActions.getUserData();
+this.setState({windPos: document.body.scrollHeight});
+document.addEventListener('scroll', this.updateData)
+}
+
+componentWillUnmount(){
+document.remooveEventListener('scroll', this.updateData)
+}
+
+componentWillReceiveProps(props){
+  this.setState({isLoad:props.isLoad})
 }
 
 render() {
- //console.log(this.state.usersInfo)
+	const usersInfo= this.props.usersInfo;
     return (
       <div className="App" style={{display:'inline-block'}}>
-      <h1 className='App-header'>Их разыскивает милиция</h1>
+      <h1 className='App-header'>Test app</h1>
       <button className="cards" onClick={this.cardsView}>Show cards</button><br/>
       <div className='users'>
-      {this.state.usersInfo!==undefined? 
-        this.state.usersInfo.map(function(item){
+      {usersInfo!==undefined? 
+        usersInfo.map(function(item){
           let key=+(item.phone.split('').filter(function(number){return isNaN(+number)? null: number}).join('').replace(/\s/g, ''));
           return <Item key={key} item={item} cards={this.state.cards}/>
         }.bind(this)) : null} 
         </div>
         </div>
         );
-
   }
 }
 
-export default App;
+function mapStateToProps(state){
+	return {
+		usersInfo: state.usersInfo.usersInfo,
+    isLoad: state.usersInfo.isload
+	}
+}
+
+function mapDispatchToProps(dispatch){
+return{
+	pageActions: bindActionCreators(pageActions, dispatch)
+}
+}
+export default connect (mapStateToProps, mapDispatchToProps)(App)
+
