@@ -1,92 +1,85 @@
-import React, {Component} from 'react';
-import Item from '../UsersList/UsersList.js';
-import './App.css';
-import {bindActionCreators} from 'redux'; //ф-ия привязки actions
-import {connect} from 'react-redux'; // ф-ия привязки стейта из стора к компоненту в props
-import * as pageActions from '../../actions/PageActions.js'// импорт actions из PageActions. Доступны как pageActions
-import {CART_TYPE_BLOCK} from '../../constants/Const.js'
-import {CART_TYPE_INLINE} from '../../constants/Const.js'
+import React, { Component } from 'react';
+import {connect} from 'react-redux';
+import * as getData from '../../actions/PageActions.js'
+import './app.css';
+import D3Feld from '../d3/D3Feld';
+import D3Lines from '../d3/D3Lines';
 
+/*
+@connect(
+	({sheudleInfo}) => ({
+	  data: sheudleInfo
+	}), dispatch => ({
+		getData: state => dispatch(getData(state))
+	})
+  )
+*/
+
+
+var rawData = [];
+for (let i=0; i<=10; i++){
+    rawData.push(
+    { x: '2013-03-'+(12+i)+' 21:06', y: 0 },
+    { x: '2013-03-'+(12+i)+' 21:06', y: 20 },
+    { x: '2013-03-'+(12+i)+' 21:06', y: 40 },
+    { x: '2013-03-'+(12+i)+' 21:06', y: 60 },
+    { x: '2013-03-'+(12+i)+' 21:06', y: 80 },
+    { x: '2013-03-'+(12+i)+' 21:06', y: 100},
+    { x: '2013-03-'+(12+i)+' 22:06', y: 96 },
+    { x: '2013-03-'+(12+i)+' 23:06', y: 90 },  
+    { x: '2013-03-'+(12+i)+' 23:06', y: 82 },
+    { x: '2013-03-'+(13+i)+' 00:06', y: 89 }, 
+    { x: '2013-03-'+(13+i)+' 01:06', y: 46 },
+    { x: '2013-03-'+(13+i)+' 02:06', y: 63 },
+    )
+}
 
 class App extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            cards: CART_TYPE_BLOCK,
-            windPos: 0,
-            isLoad: false
-        };
+	constructor(){
+		super()
+		this.state={
+			url: ''
+		}
+this.onURLChange=this.onURLChange.bind(this);
+this.getSheduleData=this.getSheduleData.bind(this);
 
-        this.updateData = this.updateData.bind(this);
-        this.cardsView = this.cardsView.bind(this);
-    }
+	}
+    onURLChange(e){
+		this.setState=({url: e.target.value})
+	}
 
-    updateData() {
-        if (window.pageYOffset + window.innerHeight > document.body.scrollHeight
-            && !this.state.isLoad) {
-            this.state.isLoad = true;
-            this.props.pageActions.getUserData(10)
-        }
-    }
+	getSheduleData(){
+		this.props.getData(this.state.url);
+	}	
 
-    cardsView() {
-        if (this.state.cards === CART_TYPE_BLOCK) {
-            this.setState({cards: CART_TYPE_INLINE, windPos: window.pageYOffset})
-        }
-        if (this.state.cards === CART_TYPE_INLINE) {
-            this.setState({cards: CART_TYPE_BLOCK, windPos: window.pageYOffset})
-        }
-    }
-
-    componentDidMount() {
-        this.props.pageActions.getUserData(20);
-        this.setState({windPos: document.body.scrollHeight});
-        document.addEventListener('scroll', this.updateData)
-    }
-
-    componentWillUnmount() {
-        document.removeEventListener('scroll', this.updateData)
-    }
-
-    componentWillReceiveProps(props) {
-        this.setState({isLoad: props.isLoad})
-    }
-
-    render() {
-   // console.log(this.props.pageActions.deleteUser);
-        const usersInfo = this.props.usersInfo;
+	render(){
         return (
-            <div className="App" style={{display: 'inline-block'}}>
-                <h1 className='App-header'>Test app</h1>
-                <button className="changeFormatCards" onClick={this.cardsView}>Show cards</button>
-                <br/>
-                <div className= "cardsContainer">
-                    {usersInfo !== undefined ?
-                        usersInfo.map(function (item, i) {
-                            let key = +(item.phone.split('').filter(function (number) {
-                                return isNaN(+number) ? null : number
-                            }).join('').replace(/\s/g, ''));
-                            return <Item key={key} item={item} index={i} cards={this.state.cards} imageId={key}
-                            delUser={this.props.pageActions.deleteUser}/>
-                        }.bind(this)) : null}
-                </div>
-            </div>
-        );
+			<div>
+				<form onSubmit={this.getSheduleData} style={{display: 'inline-block'}}>
+				<label> Введите URL: <input type="url" name="url" value={this.state.url}
+                           onChange={this.onURLChange}/></label>
+				<input type="submit" value="Submit" />
+				</form><br/>
+				<svg id="line-chart"></svg><br/>
+				<D3Feld rawData={rawData}/>
+				<D3Lines rawData={rawData}/>
+			</div>
+		)
     }
-}
+	}
 
-function mapStateToProps(state) {
-    return {
-        usersInfo: state.usersInfo.usersInfo,
-        isLoad: state.usersInfo.isload
-    }
-}
+	function mapStateToProps(state) {
+		return {
+			data: state.sheudleInfo
+		}
+	}
+	
+	function mapDispatchToProps(dispatch) {
+		return {
+			getData: state => dispatch(getData(state))
+		}
+	}
+	
+	export default connect(mapStateToProps, mapDispatchToProps)(App)
 
-function mapDispatchToProps(dispatch) {
-    return {
-        pageActions: bindActionCreators(pageActions, dispatch)
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(App)
 

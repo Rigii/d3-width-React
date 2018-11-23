@@ -1,6 +1,6 @@
 import {combineReducers} from 'redux'
-import usersInfo from './usersInfo'
+import chartsInfo from './chartsInfo'
 
 export default combineReducers({
-	usersInfo
+	chartsInfo
 })

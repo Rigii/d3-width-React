@@ -1,22 +1,22 @@
-import {GET_USERS_SUCCESS} from '../constants/Const.js'
-import {GET_USERS_ERROR} from '../constants/Const.js'
-import {DELETE_USER} from '../constants/Const.js'
+import {GET_DATA_SUCCESS} from '../constants/Const.js'
+import {GET_DATA_ERROR} from '../constants/Const.js'
+import {DELETE_DATA} from '../constants/Const.js'
 
-export function getUserData(num){
+export function getData(url){
 return (dispatch) => {
     let xhr= new XMLHttpRequest();
-    xhr.open('GET', 'https://randomuser.me/api/?results='+num);
+    xhr.open('GET', url);
     xhr.onload=function(){
       let data=JSON.parse(xhr.response);
         dispatch({
-          type: GET_USERS_SUCCESS,
+          type: GET_DATA_SUCCESS,
           payload: data.results
         })
     };
    xhr.onerror= function(){
     alert('Error');
        dispatch({
-           type: GET_USERS_ERROR,
+           type: GET_DATA_ERROR,
            payload: []
        })
     };
@@ -24,10 +24,10 @@ return (dispatch) => {
 }
 }
 
-export function deleteUser(item)
+export function deleteData(item)
 {
     return {
-        type: DELETE_USER,
+        type: DELETE_DATA,
         item: item
     }
 }
