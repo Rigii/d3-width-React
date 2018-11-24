@@ -3,7 +3,6 @@ import {connect} from 'react-redux';
 import * as getData from '../../actions/PageActions.js'
 import './app.css';
 import D3Feld from '../d3/D3Feld';
-import D3Lines from '../d3/D3Lines';
 
 /*
 @connect(
@@ -14,7 +13,6 @@ import D3Lines from '../d3/D3Lines';
 	})
   )
 */
-
 
 var rawData = [];
 for (let i=0; i<=10; i++){
@@ -36,10 +34,11 @@ for (let i=0; i<=10; i++){
 
 class App extends Component {
 	constructor(){
-		super()
+		super();
 		this.state={
 			url: ''
-		}
+		};
+
 this.onURLChange=this.onURLChange.bind(this);
 this.getSheduleData=this.getSheduleData.bind(this);
 
@@ -57,12 +56,11 @@ this.getSheduleData=this.getSheduleData.bind(this);
 			<div>
 				<form onSubmit={this.getSheduleData} style={{display: 'inline-block'}}>
 				<label> Введите URL: <input type="url" name="url" value={this.state.url}
-                           onChange={this.onURLChange}/></label>
+					    onChange={this.onURLChange}/></label>
 				<input type="submit" value="Submit" />
 				</form><br/>
-				<svg id="line-chart"></svg><br/>
+				<svg id="line-chart"/><br/>
 				<D3Feld rawData={rawData}/>
-				<D3Lines rawData={rawData}/>
 			</div>
 		)
     }
@@ -80,6 +78,6 @@ this.getSheduleData=this.getSheduleData.bind(this);
 		}
 	}
 	
-	export default connect(mapStateToProps, mapDispatchToProps)(App)
+export default connect(mapStateToProps, mapDispatchToProps)(App)
 
 

@@ -1,31 +1,51 @@
 import React, { Component } from 'react';
-import PropTypes from "prop-types";
+import D3Lines from './D3Lines';
 import * as d3 from "d3";
 
 class D3Feld extends React.Component {
+    constructor(){
+        super();
+        this.state={
+            lineComponent: null
+        }
+    }
+
+    returnLineComponent(props){
+        this.setState({
+            lineComponent: <D3Lines rawData={this.props.rawData}
+                                    width={props.width}
+                                    parseTime={props.parseTime}
+                                    svg={props.svg}
+                                    formatter={props.formatter}
+                                    x={props.x}
+                                    y={props.y}
+                                    g={props.g}
+        />
+        });
+    }
 
     componentDidMount() {
-        var svgWidth = 1250, svgHeight = 450;
-        var margin = { right: 20, bottom: 20};
-        var width = svgWidth  - margin.right;
-        var height = svgHeight - margin.bottom;
-        var formatter = d3.format(".0%")                                     
-        var parseTime = d3.timeParse('%Y-%m-%d %H:%M');                      
+        const rawData = this.props.rawData;
+        const svgWidth = 1250, svgHeight = 450;
+        const margin = { right: 20, bottom: 20};
+        const width = svgWidth  - margin.right;
+        const height = svgHeight - margin.bottom;
+        const formatter = d3.format(".0%");
+        const parseTime = d3.timeParse('%Y-%m-%d %H:%M');
 
         let svg = d3.select('#line-chart')
             .attr("class", "gist")                                           
             .attr("width", svgWidth)
-            .attr("height", svgHeight)
-            //.call(zoom);
+            .attr("height", svgHeight);
 
         let x = d3.scaleTime()                                                
-            .domain(d3.extent(this.props.rawData, function (d) { return parseTime(d.x) }))
-            .range([0, width])                                                
+            .domain(d3.extent(rawData, function (d) { return parseTime(d.x) }))
+            .range([0, width]);
 
         let y = d3.scaleLinear()                                              
             .range([height, 0]);                                              
 
-        let g = svg.append("g")                                              
+        let g = svg.append("g");
         
         let gX = g.append("g")                                                
             .attr("class", "axis axis--x")                                   
@@ -47,10 +67,13 @@ class D3Feld extends React.Component {
             .attr("class", "axis axis--y")                                   
             .select(".domain")
             .remove();
+
+        this.returnLineComponent({width, parseTime, svg, formatter, x, y, g});
     }
 
+
     render() {
-        return null
+        return this.state.lineComponent
     }
 }
 
