@@ -71,7 +71,6 @@ class D3Feld extends React.Component {
         this.returnLineComponent({width, parseTime, svg, formatter, x, y, g});
     }
 
-
     render() {
         return this.state.lineComponent
     }
