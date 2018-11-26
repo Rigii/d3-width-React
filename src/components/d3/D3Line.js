@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import * as d3 from "d3";
 
-class D3Lines extends React.Component {
+class D3Line extends React.Component {
 
     componentDidMount() {
         const{rawData,
@@ -10,11 +10,9 @@ class D3Lines extends React.Component {
             svg,
             formatter,
             x, y, g} = this.props;
-
         const line = d3.line()
             .x(function (d) { return x(parseTime(d.x)) })
             .y(function (d) { return y(d.y / 100) });
-           
 
         g.append("path")
             .attr("class", "line")
@@ -58,4 +56,4 @@ class D3Lines extends React.Component {
     }
 }
 
-export default D3Lines
+export default D3Line

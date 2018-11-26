@@ -19,8 +19,8 @@ const otherRawData = {
 	bananas: [8, 20, 56, 34, 45, 37, 95, 74, 80, 100],
 	apples: [17, 45, 94, 30, 87, 34, 24, 86],
 	oranges: [67, 34, 58, 58, 34, 2, 69, 97, 77],
-	timeStamp: ['2013-03-12', '2013-03-13', '2013-03-14', '2013-03-15', '2013-03-16', '2013-03-17', '2013-03-18', '2013-03-19',
-		'2013-03-20', '2013-03-21']
+	timeStamp: ['2013-03-12 21:06', '2013-03-13 21:06', '2013-03-14 21:06', '2013-03-15 21:06', '2013-03-16 21:06',
+		'2013-03-17 21:06', '2013-03-18 21:06', '2013-03-19 21:06', '2013-03-20 21:06', '2013-03-21 21:06']
 };
 
 const rawData = [];
@@ -60,11 +60,11 @@ class App extends Component {
 			this.setState(prevState => ({
 				drawingLines: [...prevState.drawingLines, name]
 			}))
-		} 
+		}
 		if (index != -1) {
 			this.setState((prevState) => ({
-				drawingLines: [...prevState.drawingLines.slice(0,index), ...prevState.drawingLines.slice(index+1)]
-			  }))
+				drawingLines: [...prevState.drawingLines.slice(0, index), ...prevState.drawingLines.slice(index + 1)]
+			}))
 		}
 	}
 

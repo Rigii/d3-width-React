@@ -10,7 +10,7 @@ function CheckBoxContainer(props) {
         }
         return  <CheckBoxComponent value={name} key={key} drawThisChart={props.drawThisChart}/>
     });
-
+    
 }
 
 export default CheckBoxContainer
