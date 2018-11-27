@@ -39,11 +39,13 @@ class D3Feld extends React.Component {
             .attr("height", svgHeight);
 
         let x = d3.scaleTime()
-            .domain(d3.extent(rawData, function (d) { return parseTime(d.x) }))
-            .range([0, width]);
-        /*   .domain(d3.extent(rawData.timeStamp.map(function (d) {
+           /*  .domain(d3.extent(rawData, function (d) { 
+                console.log(d)
+                return parseTime(d.x) }))
+                .range([0, width]);*/
+          .domain(d3.extent(rawData.timeStamp.map(function (d) {
                return parseTime(d) })))
-           .range([0, width]);*/
+           .range([0, width]);
 
         let y = d3.scaleLinear()
             .range([height, 0]);
