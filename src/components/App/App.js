@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as getData from '../../actions/PageActions.js'
+import sortObj from './../helpers/helpers.js'
 import './app.css';
 import CheckBoxContainer from './../checkbox-container/CheckBoxContainer.js'
 import D3Feld from '../d3/D3Feld';
@@ -22,6 +23,8 @@ const otherRawData = {
 	timeStamp: ['2013-03-12 21:06', '2013-03-13 21:06', '2013-03-14 21:06', '2013-03-15 21:06', '2013-03-16 21:06',
 		'2013-03-17 21:06', '2013-03-18 21:06', '2013-03-19 21:06', '2013-03-20 21:06', '2013-03-21 21:06']
 };
+let newArr = sortObj(otherRawData); //в диспатч
+
 
 const rawData = [];
 for (let i = 0; i <= 10; i++) {
@@ -40,6 +43,9 @@ for (let i = 0; i <= 10; i++) {
 		{ x: '2013-03-' + (13 + i) + ' 02:06', y: 63 },
 	)
 }
+
+
+
 
 class App extends Component {
 	constructor() {
