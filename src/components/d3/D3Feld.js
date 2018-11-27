@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import D3Lines from './D3Lines';
 import * as d3 from "d3";
+import moment from 'moment';
 
 class D3Feld extends React.Component {
     constructor() {
@@ -10,9 +11,11 @@ class D3Feld extends React.Component {
         }
     }
 
-    returnLineComponent(props) {
+    returnLineComponent(props) {  
         this.setState({
-            lineComponent: <D3Lines rawData={this.props.rawData}
+            lineComponent: <D3Lines
+                formattedDate={props.formattedDate}
+                rawData={this.props.rawData}
                 width={props.width}
                 parseTime={props.parseTime}
                 svg={props.svg}
@@ -20,11 +23,13 @@ class D3Feld extends React.Component {
                 x={props.x}
                 y={props.y}
                 g={props.g}
+                drawingLines= {this.props.drawingLines}
             />
         });
     }
 
     componentDidMount() {
+        console.log(this.props.drawingLines)
         const rawData = this.props.rawData;
         const svgWidth = 1250, svgHeight = 450;
         const margin = { right: 20, bottom: 20 };
@@ -32,6 +37,13 @@ class D3Feld extends React.Component {
         const height = svgHeight - margin.bottom;
         const formatter = d3.format(".0%");
         const parseTime = d3.timeParse('%Y-%m-%d %H:%M');
+        let formattedDate = []
+        rawData.timeStamp.map(function (d) {
+            const formatted = moment.unix(d).format("YYYY-MM-DD HH:mm");
+            console.log(formatted)
+            formattedDate.push(formatted)
+        })
+
 
         let svg = d3.select('#line-chart')
             .attr("class", "gist")
@@ -39,13 +51,10 @@ class D3Feld extends React.Component {
             .attr("height", svgHeight);
 
         let x = d3.scaleTime()
-           /*  .domain(d3.extent(rawData, function (d) { 
-                console.log(d)
-                return parseTime(d.x) }))
-                .range([0, width]);*/
-          .domain(d3.extent(rawData.timeStamp.map(function (d) {
-               return parseTime(d) })))
-           .range([0, width]);
+            .domain(d3.extent(formattedDate.map(function (d) {
+                return parseTime(d)
+            })))
+            .range([0, width]);
 
         let y = d3.scaleLinear()
             .range([height, 0]);
@@ -73,7 +82,7 @@ class D3Feld extends React.Component {
             .select(".domain")
             .remove();
 
-        this.returnLineComponent({ width, parseTime, svg, formatter, x, y, g });
+        this.returnLineComponent({ formattedDate, width, parseTime, svg, formatter, x, y, g });
     }
 
 

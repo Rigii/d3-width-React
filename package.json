@@ -5,6 +5,7 @@
   "dependencies": {
     "d3": "^5.7.0",
     "image-palette-core": "^0.2.2",
+    "moment": "^2.22.2",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
     "react-image-palette": "^0.2.4",

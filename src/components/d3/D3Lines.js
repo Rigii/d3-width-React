@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import * as d3 from "d3";
 import getRandomColor from './../helpers/helpers.js'
+import moment from 'moment'
 
 class D3Lines extends React.Component {
 
@@ -10,15 +11,29 @@ class D3Lines extends React.Component {
             parseTime,
             svg,
             formatter,
+            formattedDate,
+            drawingLines,
             x, y, g } = this.props;
 
+            console.log(drawingLines)
+
         const line = d3.line()
-            .x(function (d, i) { return x(parseTime(rawData.timeStamp[i])) })
+            .x(function (d, i) { return x(parseTime(formattedDate[i])) })
             .y(function (d) { return y(d / 100) });
 
-        var div = d3.select("body").append("div")
+        const div = d3.select("body").append("div")
             .attr("class", "tooltip")
             .style("opacity", 0);
+
+        svg.on("mousemove", function () {
+            let scaleTime = moment(x.invert(d3.mouse(this)[0])).format("X")
+            for (let i = 0; i < rawData.timeStamp.length; i++) {
+                let arrTime = rawData.timeStamp[i]
+               // console.log([scaleTime])
+                if (scaleTime == arrTime) { console.log(arrTime) };
+            }
+           // console.log(scaleTime)
+        });
 
         Object.keys(rawData).map((key) => {
             if (key != 'timeStamp') {
@@ -30,8 +45,19 @@ class D3Lines extends React.Component {
                     .attr("stroke", elColor)
                     .attr("stroke-width", 1.5)
                     .attr("d", line);
+            }
+        })
+    }
 
-            // Точки и функция отображ.
+    render() {
+        return null
+    }
+}
+
+export default D3Lines
+
+/*
+// Точки и функция отображ.
             svg.selectAll("dot")
                 .data(rawData[key])
                 .enter().append("circle")
@@ -53,13 +79,4 @@ class D3Lines extends React.Component {
                         .duration(500)
                         .style("opacity", 0);
                 });
-            }
-        })
-    }
-
-    render() {
-        return null
-    }
-}
-
-export default D3Lines
+*/
