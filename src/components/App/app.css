@@ -53,3 +53,11 @@ div.tooltip {
     fill: none;
     pointer-events: all;
   }
+
+  .checkBoxContainer{
+      display: -webkit-box;
+  }
+
+  .mainDiv{
+      margin: 10px;
+  }

@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux'
+import * as actionCreators from '../../actions/PageActions.js'
 
 class CheckBoxComponent extends Component {
     constructor() {
@@ -7,7 +10,7 @@ class CheckBoxComponent extends Component {
     }
 
     setChartsData(e) {
-        if (e.target.value != 'timeStamp') this.props.drawThisChart(e.target.value)
+        this.props.chooseItems(e.target.value)
     }
     render() {
         return (
@@ -18,4 +21,10 @@ class CheckBoxComponent extends Component {
     }
 }
 
-export default CheckBoxComponent;
+function mapDispatchToProps(dispatch) {
+    return {
+        chooseItems: bindActionCreators(actionCreators.chooseItems, dispatch)
+    }
+}
+
+export default connect(null, mapDispatchToProps)(CheckBoxComponent);

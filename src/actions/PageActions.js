@@ -1,6 +1,8 @@
 import {GET_DATA_SUCCESS} from '../constants/Const.js'
 import {GET_DATA_ERROR} from '../constants/Const.js'
 import {DELETE_DATA} from '../constants/Const.js'
+import {CHOOSE_ITEM} from '../constants/Const.js'
+import { CHANGE_LINE_PROPS } from '../constants/Const.js'
 
 export function getData(url){
 return (dispatch) => {
@@ -28,6 +30,22 @@ export function deleteData(item)
 {
     return {
         type: DELETE_DATA,
-        item: item
+        payload: item
+    }
+}
+
+export function chooseItems(item)
+{
+    return {
+        type: CHOOSE_ITEM,
+        payload: item
+    }
+}
+
+export function changeLineProps(item)
+{
+    return {
+        type: CHANGE_LINE_PROPS,
+        payload: item
     }
 }

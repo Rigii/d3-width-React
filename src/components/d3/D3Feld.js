@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux'
+import * as pageActions from '../../actions/PageActions.js'
 import D3Lines from './D3Lines';
 import * as d3 from "d3";
 import moment from 'moment';
@@ -6,32 +9,36 @@ import moment from 'moment';
 class D3Feld extends React.Component {
     constructor() {
         super();
-        this.state = {
-            lineComponent: null
-        }
+        this.returnLineComponent = this.returnLineComponent.bind(this)
     }
 
-    returnLineComponent(props) {  
-        this.setState({
-            lineComponent: <D3Lines
-                formattedDate={props.formattedDate}
-                rawData={this.props.rawData}
-                width={props.width}
-                parseTime={props.parseTime}
-                svg={props.svg}
-                formatter={props.formatter}
-                x={props.x}
-                y={props.y}
-                g={props.g}
-                drawingLines= {this.props.drawingLines}
-            />
-        });
+    returnLineComponent() {
+        if (this.lineProps !== undefined) {
+            return (
+                <D3Lines
+                    formattedDate={this.lineProps.formattedDate}
+                    rawData={this.lineProps.rawData}
+                    width={this.lineProps.width}
+                    parseTime={this.lineProps.parseTime}
+                    svg={this.lineProps.svg}
+                    formatter={this.lineProps.formatter}
+                    x={this.lineProps.x}
+                    y={this.lineProps.y}
+                    g={this.lineProps.g}
+                />)
+        }
+        return null
+    }
+
+    componentWillMount(){
+        d3.selectAll("path.line").remove();
     }
 
     componentDidMount() {
-        console.log(this.props.drawingLines)
+        const screen = window.innerWidth 
+        console.log(screen)
         const rawData = this.props.rawData;
-        const svgWidth = 1250, svgHeight = 450;
+        const svgWidth = window.innerWidth- 100, svgHeight = 450;
         const margin = { right: 20, bottom: 20 };
         const width = svgWidth - margin.right;
         const height = svgHeight - margin.bottom;
@@ -40,15 +47,15 @@ class D3Feld extends React.Component {
         let formattedDate = []
         rawData.timeStamp.map(function (d) {
             const formatted = moment.unix(d).format("YYYY-MM-DD HH:mm");
-            console.log(formatted)
             formattedDate.push(formatted)
         })
-
 
         let svg = d3.select('#line-chart')
             .attr("class", "gist")
             .attr("width", svgWidth)
             .attr("height", svgHeight);
+
+        this.svg = svg
 
         let x = d3.scaleTime()
             .domain(d3.extent(formattedDate.map(function (d) {
@@ -82,13 +89,31 @@ class D3Feld extends React.Component {
             .select(".domain")
             .remove();
 
-        this.returnLineComponent({ formattedDate, width, parseTime, svg, formatter, x, y, g });
+      this.props.changeLineProps({ formattedDate, width, parseTime, svg, formatter, x, y, g })
+       this.lineProps = {rawData, formattedDate, width, parseTime, svg, formatter, x, y, g }
     }
 
 
     render() {
-        return this.state.lineComponent
+        console.log(this.props.lineProps)
+        return this.returnLineComponent()
+    }
+
+    componentWillUnmount(){
+        d3.select("path.line").remove()
+     }
+}
+
+function mapStateToProps(state) {
+    return {
+        lineProps: state.chartsInfo.lineProps,
     }
 }
 
-export default D3Feld
+function mapDispatchToProps(dispatch) {
+    return {
+        changeLineProps: bindActionCreators(pageActions.changeLineProps, dispatch)
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(D3Feld)
