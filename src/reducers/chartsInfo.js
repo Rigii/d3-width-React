@@ -13,7 +13,7 @@ const initialState = {
     timeStamp: ["1541085000", "1541171400", "1541257800", "1541344200", "1541430600", "1541517000", "1541603400",
       "1541689800", "1541776200", "1541862600"]
   },
-  activePositons: [],
+  activePositions: [],
   lineProps: {}
 };
 
@@ -28,13 +28,13 @@ export default function userstate(state = initialState, action) {
   }
 
   if (action.type === CHOOSE_ITEM) {
-    let index = prevInfo.activePositons.indexOf(action.payload);
+    let index = prevInfo.activePositions.indexOf(action.payload);
     if (index == -1) {
-      return { ...state, activePositons: prevInfo.activePositons.concat(action.payload) }
+      return { ...state, activePositions: prevInfo.activePositions.concat(action.payload) }
     }
     if (index != -1) {
-      const newState = [...prevInfo.activePositons.slice(0, index), ...prevInfo.activePositons.slice(index + 1)]
-      return { ...state, activePositons: newState }
+      const newState = [...prevInfo.activePositions.slice(0, index), ...prevInfo.activePositions.slice(index + 1)]
+      return { ...state, activePositions: newState }
     }
   }
 

@@ -4,53 +4,42 @@ import * as d3 from "d3";
 import getRandomColor from './../helpers/helpers.js'
 import moment from 'moment'
 
+
 class D3Lines extends React.Component {
 
     render() {
         const {
             rawData,
             parseTime,
+            width,
+            height,
             svg,
-            formatter,
             formattedDate,
-            activePositons,
+            formatter,
             x, y, g } = this.props.lineProps;
-        const key = this.props.name
+        const key = this.props.name;
 
         const line = d3.line()
             .x(function (d, i) { return x(parseTime(formattedDate[i])) })
             .y(function (d) { return y(d / 100) });
 
-        svg.on("mousemove", function () {
-            let scaleTime = moment(x.invert(d3.mouse(this)[0])).format("X")
-            for (let i = 0; i < rawData.timeStamp.length; i++) {
-                let arrTime = rawData.timeStamp[i]
-                // console.log([scaleTime])
-                if (scaleTime == arrTime) { console.log(arrTime) };
-            }
-            // console.log(scaleTime)
-        });
-
-
-        let elColor = getRandomColor()
+        let elColor = getRandomColor();
         g.append("path")
-            .attr("class", "line")
+            .attr("class", key)
             .datum(rawData[key])
             .attr("fill", "none")
             .attr("stroke", elColor)
             .attr("stroke-width", 1.5)
             .attr("d", line);
 
+
         return null
     }
-    componentWillUnmount(){
-        d3.select("path.line").remove()
-     }
 }
 
 function mapStateToProps(state) {
     return {
-        activePositons: state.chartsInfo.activePositons,
+        activePositions: state.chartsInfo.activePositions,
     }
 }
 
@@ -58,15 +47,27 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps)(D3Lines)
 
 /*
+svg.on("mousemove", function () {
+            let scaleTime = moment(x.invert(d3.mouse(this)[0])).format("X");
+            for (let i = 0; i < rawData.timeStamp.length; i++) {
+                let arrTime = rawData.timeStamp[i];
+                // console.log([scaleTime])
+                if (scaleTime == arrTime) { console.log(arrTime) };
+            }
+            // console.log(scaleTime)
+        });
+
 // Точки и функция отображ.
-            svg.selectAll("dot")
-                .data(rawData[key])
-                .enter().append("circle")
-                .attr("r", 4)
-                .attr("class", 'circle')
-                .attr("stroke", elColor)
-                .attr("cx", function (d, i) { return x(parseTime(rawData.timeStamp[i])) })
-                .attr("cy", function (d) { return y(d / 100) })
+             svg.selectAll("dot")
+            .data(rawData[key])
+            .enter().append("circle")
+            .attr("r", 4)
+            .attr("class", key)
+            .attr("fill", "white")
+            .attr("stroke", elColor)
+            .attr("cx", function (d, i) { return x(parseTime(formattedDate[i])) })
+            .attr("cy", function (d) { return y(d / 100) });
+           // .style("display", "none");
                 .on("mouseover", function (d, i) {
                     div.transition()
                         .duration(200)
