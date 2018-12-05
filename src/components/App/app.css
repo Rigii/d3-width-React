@@ -6,7 +6,7 @@ html, body {
 }
 
 .gist{
-    background-color: #ffeae5;
+    
     overflow: visible;
     margin-left: 60px;
 }
@@ -17,10 +17,10 @@ html, body {
 }
 
 .axis--x .tick line {
-    stroke: white;
+    stroke: grey;
     width: 10px;
     opacity: 0.5;
-    stroke-width: 10px;
+
 }
 
 .axis--x .tick text{
@@ -28,21 +28,22 @@ html, body {
 }
 
 .axis--y .tick line {
-    stroke: #fde0dc;
+    stroke: grey;
+    opacity: 0.5;
     width: 10px;
 }
 
 div.tooltip {	
     position: absolute;			
     text-align: center;			
-    width: 60px;					
-    height: 28px;					
-    padding: 2px;				
+    width:  fit-content;				
+    height: fit-content;					
+    padding: 5px;				
     font: 12px sans-serif;		
     background: lightsteelblue;	
     border: 0px;		
     border-radius: 8px;			
-    pointer-events: none;			
+    			
 }
 .circle {
     fill: white;

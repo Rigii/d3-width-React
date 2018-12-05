@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as d3 from "d3";
 import getRandomColor from './../helpers/helpers.js'
-import moment from 'moment'
+
 
 
 class D3Lines extends React.Component {
@@ -37,14 +37,9 @@ class D3Lines extends React.Component {
     }
 }
 
-function mapStateToProps(state) {
-    return {
-        activePositions: state.chartsInfo.activePositions,
-    }
-}
 
 
-export default connect(mapStateToProps)(D3Lines)
+export default D3Lines
 
 /*
 svg.on("mousemove", function () {

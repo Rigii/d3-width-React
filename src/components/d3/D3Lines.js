@@ -6,7 +6,7 @@ import * as d3 from "d3";
 
 class D3Lines extends Component {
 
-    componentWillReceiveProps(){
+    componentWillReceiveProps() {
         this.prevActiveLines = this.props.activePositions;
     }
 
@@ -21,11 +21,11 @@ class D3Lines extends Component {
                 }
                 return <D3Line key={key} name={name} lineProps={this.props} />
             }
-            if (isChartActive == -1){
-            d3.select("path."+name).remove();
-            d3.selectAll("circle."+name).remove();
-            return null
-        }
+            if (isChartActive == -1) {
+                d3.select("path." + name).remove();
+                d3.selectAll("circle." + name).remove();
+                return null
+            }
         })
     }
 }

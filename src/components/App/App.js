@@ -34,10 +34,10 @@ class App extends Component {
 					<input type="submit" value="Submit" />
 				</form><br />
 				<div className={'checkBoxContainer'}>
-				<CheckBoxContainer className={'checkBoxContainer'} chartsInfo={this.props.chartsInfo}/>
+					<CheckBoxContainer className={'checkBoxContainer'} chartsInfo={this.props.chartsInfo} />
 				</div>
-				<svg id="line-chart" /><br/>
-				<D3Feld rawData={this.props.chartsInfo}/>
+				<svg id="line-chart" /><br />
+				<D3Feld rawData={this.props.chartsInfo} />
 			</div>
 		)
 	}

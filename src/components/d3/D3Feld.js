@@ -15,36 +15,37 @@ class D3Feld extends React.Component {
 
     returnLineComponent() {
         if (this.lineProps !== undefined) {
+            console.log(this.lineProps)
             return (
                 <div>
-                <D3Lines
-                    formattedDate={this.lineProps.formattedDate}
-                    rawData={this.lineProps.rawData}
-                    width={this.lineProps.width}
-                    height={this.lineProps.height}
-                    parseTime={this.lineProps.parseTime}
-                    svg={this.lineProps.svg}
-                    formatter={this.lineProps.formatter}
-                    x={this.lineProps.x}
-                    y={this.lineProps.y}
-                    g={this.lineProps.g}
-                />
-                    <D3ResponsiveElements
-                    lineProps={this.lineProps}
+                    <D3Lines
+                        formattedDate={this.lineProps.formattedDate}
+                        rawData={this.lineProps.rawData}
+                        width={this.lineProps.width}
+                        height={this.lineProps.height}
+                        parseTime={this.lineProps.parseTime}
+                        svg={this.lineProps.svg}
+                        formatter={this.lineProps.formatter}
+                        x={this.lineProps.x}
+                        y={this.lineProps.y}
+                        g={this.lineProps.g}
                     />
-        </div>
-        )
+                    <D3ResponsiveElements
+                        lineProps={this.lineProps}
+                    />
+                </div>
+            )
         }
         return null
     }
 
-    componentWillMount(){
+    componentWillMount() {
         d3.selectAll("path.line").remove();
     }
 
     componentDidMount() {
         const rawData = this.props.rawData;
-        const svgWidth = window.innerWidth- 100, svgHeight = 450;
+        const svgWidth = window.innerWidth - 100, svgHeight = 450;
         const margin = { right: 20, bottom: 20 };
         const width = svgWidth - margin.right;
         const height = svgHeight - margin.bottom;
@@ -79,7 +80,8 @@ class D3Feld extends React.Component {
             .attr("transform", "translate(0," + height + ")")
             .call(d3.axisBottom(x)
                 .ticks(16)
-                .tickSize(-height)
+                // .tickSize(-height)
+                .tickSize(3)
                 .tickPadding(6))
             .select(".domain")
             .remove();
@@ -87,16 +89,34 @@ class D3Feld extends React.Component {
         let gY = g.append("g")
             .call(d3.axisLeft(y)
                 .ticks(6)
-                .tickSize(-svgWidth)
+                //.tickSize(-svgWidth)
+                .tickSize(3)
                 .tickPadding(6)
                 .tickFormat(formatter)
             )
             .attr("class", "axis axis--y")
             .select(".domain")
-            .remove();
+        //.remove();
 
-      this.props.changeLineProps({ formattedDate, width, parseTime, svg, formatter, x, y, g });
-       this.lineProps = {rawData, formattedDate, height, width, parseTime, svg, formatter, x, y, g }
+        d3.selectAll("g.axis--x g.tick")
+            .append("line")
+            .classed("grid-line", true)
+            .attr("x1", 0)
+            .attr("y1", 0)
+            .attr("x2", 0)
+            .attr("y2", - (height));
+
+
+        d3.selectAll("g.axis--y g.tick")
+            .append("line")
+            .classed("grid-line", true)
+            .attr("x1", 0)
+            .attr("y1", 0)
+            .attr("x2", svgWidth)
+            .attr("y2", 0);
+
+        this.props.changeLineProps({ formattedDate, width, parseTime, svg, formatter, x, y, g });
+        this.lineProps = { rawData, formattedDate, height, width, parseTime, svg, formatter, x, y, g }
     }
 
 
