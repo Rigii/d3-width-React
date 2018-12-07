@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as d3 from "d3";
 import moment from 'moment';
+import PropTypes from 'prop-types'
 
 class D3ResponsiveElements extends Component {
 
@@ -10,19 +11,17 @@ class D3ResponsiveElements extends Component {
     }
 
     render() {
-        const { formattedDate,
-            rawData,
-            width,
+        const {
+            formattedDate,
+            chartsData,
             height,
-            parseTime,
             svg,
-            formatter,
-            x,
-            y,
-            g } = this.props.lineProps;
-        let bisectDate = d3.bisector(function (d) { return d; }).left;
-        let activePositions = this.props.activePositions;
-
+            xAxis,
+            yAxis } = this.context;
+       // console.log(this.context)
+        const parseTime = d3.timeParse('%Y-%m-%d %H:%M');
+        const bisectDate = d3.bisector(function (d) { return d; }).left;
+        const activePositions = this.props.activePositions;
 
         svg.on("mousemove", mousemove)
             .on("mouseout", function () {
@@ -32,48 +31,48 @@ class D3ResponsiveElements extends Component {
             });
 
         function mousemove() {
-            let scaleTime = moment(x.invert(d3.mouse(this)[0])).format("X"),
-                i = bisectDate(rawData.timeStamp, scaleTime, 1),
+            const scaletime = moment(xAxis.invert(d3.mouse(this)[0])).format("X"),
+                i = bisectDate(chartsData.timeStamp, scaletime, 1),
                 d0 = i - 1,
                 d1 = i,
-                n = scaleTime - rawData.timeStamp[d0] > rawData.timeStamp[d1] - scaleTime ? d1 : d0;
+                n = scaletime - chartsData.timeStamp[d0] > chartsData.timeStamp[d1] - scaletime ? d1 : d0;
             for (let i = 0; i < activePositions.length; i++) {
-                let key = activePositions[i];
+                const key = activePositions[i];
 
                 d3.selectAll("circle." + key).remove();
                 svg.selectAll("dot")
-                    .data([rawData[key][n]])
+                    .data([chartsData[key][n]])
                     .enter().append("circle")
                     .attr("r", 3)
                     .attr("class", key)
                     .attr("fill", "white")
                     .attr("stroke", 'blue')
                     .attr("cx", function (d, i) {
-                        if (d !== null && d !== undefined) return x(parseTime(formattedDate[n]));
+                        if (d !== null && d !== undefined) return xAxis(parseTime(formattedDate[n]));
                         return null
                     })
                     .attr("cy", function (d) {
-                        if (d !== null && d !== undefined) return y(d / 100);
+                        if (d !== null && d !== undefined) return yAxis(d);
                     });
             }
             if (activePositions.length != 0) {
                 d3.selectAll("line.lineVertical").remove();
                 svg.append("line")
                     .attr("class", 'lineVertical')
-                    .attr("x1", x(parseTime(formattedDate[n])))
+                    .attr("x1", xAxis(parseTime(formattedDate[n])))
                     .attr("y1", 0)
-                    .attr("x2", x(parseTime(formattedDate[n])))
+                    .attr("x2", xAxis(parseTime(formattedDate[n])))
                     .attr("y2", height)
                     .style("stroke-width", 0.5)
                     .style("stroke", "black")
                     .style("fill", "none");
 
-                let modalContent = () => {
+                const modalContent = () => {
                     let text = ""
                     for (let i = 0; i < activePositions.length; i++) {
-                        let key = activePositions[i];
-                        text = '<p>' + text + key + " " + rawData[key][n] + '</p>';
-
+                        const key = activePositions[i];
+                        text = '<p>' + text + key + " " + chartsData[key][n] + '</p>';
+                        if (chartsData[key][n] == undefined) { d3.selectAll(".tooltip").remove() };
                     }
                     return text
                 }
@@ -87,6 +86,16 @@ class D3ResponsiveElements extends Component {
             }
         }
         return null
+    }
+    static contextTypes = {
+        svg: PropTypes.instanceOf(Object),
+        maxArrName: PropTypes.string,
+        chartsData: PropTypes.instanceOf(Object),
+        g: PropTypes.instanceOf(Object),
+        formattedDate: PropTypes.instanceOf(Array),
+        yAxis: PropTypes.instanceOf(Object),
+        xAxis: PropTypes.instanceOf(Object),
+        height: PropTypes.number
     }
 }
 

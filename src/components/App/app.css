@@ -62,3 +62,17 @@ div.tooltip {
   .mainDiv{
       margin: 10px;
   }
+
+  .button{
+      width: 120px;
+      height: 30px;
+      background-color: rgb(74, 116, 13);
+      color: white;
+      margin-top: 3px;
+      text-align: center;
+      box-shadow: 1px 2px 3px 0px #808080;
+      border-radius: 2px;
+      cursor: pointer;
+      line-height: 2em
+
+  }

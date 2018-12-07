@@ -3,15 +3,17 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import D3Line from './D3Line';
 import * as d3 from "d3";
+import PropTypes from 'prop-types'
 
-class D3Lines extends Component {
+class D3RenderDataLines extends Component {
 
     componentWillReceiveProps() {
         this.prevActiveLines = this.props.activePositions;
     }
 
     render() {
-        return Object.keys(this.props.rawData).map((name) => {
+        return Object.keys(this.context.chartsData).map((name) => {
+
             let isChartActive = this.props.activePositions.indexOf(name);
             let isChartDrawed = this.prevActiveLines !== undefined ? this.prevActiveLines.indexOf(name) : 0;
             if (isChartActive !== -1 && isChartDrawed === -1) {
@@ -19,7 +21,7 @@ class D3Lines extends Component {
                 for (let n = 0; n < name.length; n++) {
                     key = key + name.charCodeAt(n)
                 }
-                return <D3Line key={key} name={name} lineProps={this.props} />
+                return <D3Line key={key} name={name} lineProps={this.context} />
             }
             if (isChartActive == -1) {
                 d3.select("path." + name).remove();
@@ -27,6 +29,16 @@ class D3Lines extends Component {
                 return null
             }
         })
+    }
+
+    static contextTypes = {
+        svg: PropTypes.instanceOf(Object),
+        maxArrName: PropTypes.string,
+        chartsData: PropTypes.instanceOf(Object),
+        g: PropTypes.instanceOf(Object),
+        formattedDate: PropTypes.instanceOf(Array),
+        yAxis: PropTypes.instanceOf(Object),
+        xAxis: PropTypes.instanceOf(Object)
     }
 }
 
@@ -36,4 +48,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps)(D3Lines)
+export default connect(mapStateToProps)(D3RenderDataLines)
