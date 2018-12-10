@@ -23,12 +23,12 @@ class D3Container extends React.Component {
                     maxName = name
                 }
             }
-        })
+        });
         this.maxArrName = maxName
     }
 
     render() {
-        return this.props.children
+        return Object.keys(this.chartsData).length === 0 ? null : this.props.children
     }
     static childContextTypes = {
         chartsData: PropTypes.instanceOf(Object),

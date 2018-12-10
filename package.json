@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "babel-plugin-transform-decorators-legacy": "^1.3.5",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-1": "^6.24.1",
+    "core-decorators": "^0.20.0",
     "d3": "^5.7.0",
     "image-palette-core": "^0.2.2",
     "moment": "^2.22.2",
