@@ -18,7 +18,7 @@ class D3Feld extends React.Component {
         d3.selectAll("path.line").remove();
 
         const svgWidth = window.innerWidth - 100,
-              svgHeight = window.innerHeight;
+            svgHeight = window.innerHeight;
         this.svg = d3.select('#line-chart')
             .attr("class", "gist")
             .attr("width", svgWidth)

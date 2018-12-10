@@ -7,8 +7,8 @@ html, body {
 
 .gist{
     
-    overflow: visible;
-    margin-left: 60px;
+    overflow: hidden;
+    margin-left: 30px;
 }
 
 .axis--x .domain {

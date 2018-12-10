@@ -46,7 +46,8 @@ class Axis extends React.Component {
             .range([this.height, 0]);
 
         if (svg !== undefined) {
-            this.g = svg.append("g");
+            this.g = svg.append("g")
+                .attr("transform", "translate(" + margin.right + ")")
             const lineAxisX = this.g.append("g")
                 .attr("class", "axis axis--x")
                 .attr("transform", "translate(0," + this.height + ")")

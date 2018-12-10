@@ -1,11 +1,11 @@
-function sortObj(obj){
+function sortObj(obj) {
     let newArr = [];
-        for (let i = 0; i < obj.timeStamp.length; i++){
-            let newObj = {};
-            Object.keys(obj).map((key) => {
-                if (obj[key][i] !== undefined) newObj[key]= obj[key][i]
+    for (let i = 0; i < obj.timeStamp.length; i++) {
+        let newObj = {};
+        Object.keys(obj).map((key) => {
+            if (obj[key][i] !== undefined) newObj[key] = obj[key][i]
         });
-            newArr.push(newObj)
+        newArr.push(newObj)
     }
     return newArr;
 }
@@ -14,7 +14,7 @@ export const getRandomColor = () => {
     let letters = '0123456789ABCDEF';
     let color = '#';
     for (let i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
+        color += letters[Math.floor(Math.random() * 16)];
     }
     return color;
 };
@@ -22,19 +22,33 @@ export const getRandomColor = () => {
 export const getDataFetch = (url) => {
     fetch(url)
         .then(function (response) {
-            let data = JSON.parse(response);
-            console.log( response.json());
-            return data;
+        //    let data = JSON.parse(response);
+            console.log(response);
+            return response;
         })
         .catch(
             ((reject) => {
-                console.log(reject);
-                return ({})
+                console.log('fail to load ' + reject.status);
             })
         );
 };
 
 /*
+xport const requests = (setting, pathname) =>
+  fetch(`${window.location.origin + pathname}`, {
+    ...setting,
+  })
+      .then(checkStatus)
+      .then(getJson)
+      .then(json => {
+          return Promise.resolve(json);
+      })
+      .catch(ex => {
+          console.error('parsing failed', ex);
+          return Promise.reject(ex);
+      });
+
+
 export const getData = (url) => {
     return (dispatch) => {
         let xhr = new XMLHttpRequest();

@@ -18,8 +18,8 @@ class D3ResponsiveElements extends Component {
             svg,
             xAxis,
             yAxis } = this.context;
-       // console.log(this.context)
-        const parseTime = d3.timeParse('%Y-%m-%d %H:%M');
+
+        const parseTime = d3.timeParse('%Y-%m-%d %H:%M');``
         const bisectDate = d3.bisector(function (d) { return d; }).left;
         const activePositions = this.props.activePositions;
 
@@ -43,6 +43,7 @@ class D3ResponsiveElements extends Component {
                 svg.selectAll("dot")
                     .data([chartsData[key][n]])
                     .enter().append("circle")
+                    .attr("transform", "translate(" + 20 + ")") //??
                     .attr("r", 3)
                     .attr("class", key)
                     .attr("fill", "white")
@@ -59,6 +60,7 @@ class D3ResponsiveElements extends Component {
                 d3.selectAll("line.lineVertical").remove();
                 svg.append("line")
                     .attr("class", 'lineVertical')
+                    .attr("transform", "translate(" + 20 + ")") //??
                     .attr("x1", xAxis(parseTime(formattedDate[n])))
                     .attr("y1", 0)
                     .attr("x2", xAxis(parseTime(formattedDate[n])))
