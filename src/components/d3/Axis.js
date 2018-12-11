@@ -1,9 +1,18 @@
 import React from 'react'
 import * as d3 from "d3";
 import moment from 'moment';
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 class Axis extends React.Component {
+
+    constructor() {
+        super()
+        this.zoomFunction = this.zoomFunction.bind(this)
+    }
+    shouldComponentUpdate(nextProps) {
+        if (nextProps !== this.props) return true
+    }
 
     getChildContext() {
         return {
@@ -11,11 +20,33 @@ class Axis extends React.Component {
             formattedDate: this.formattedDate,
             xAxis: this.xAxis,
             yAxis: this.yAxis,
-            height: this.height
+            height: this.height,
+            lineAxisX: this.lineAxisX,
+            new_xScale: this.new_xScale
         };
     }
 
+    zoomFunction() {
+        const parseTime = d3.timeParse('%Y-%m-%d %H:%M');
+        const { formattedDate, yAxis } = this
+        let new_xScale = d3.event.transform.rescaleX(this.xAxis);
+
+        let newLine = d3.line()
+            .defined(function (d, i) { return formattedDate[i] != 0; })
+            .x(function (d, i) { return new_xScale(parseTime(formattedDate[i])) })
+            .y(function (d) { return yAxis(d) });
+
+        this.g.select(".axis--x").call(d3.axisBottom(this.xAxis).scale(new_xScale).ticks(16).tickSize(-this.height).tickPadding(6))
+        this.g.selectAll(".line").attr("d", newLine)
+        this.new_xScale = new_xScale
+  
+    }
+
     componentWillMount() {
+        
+    }
+
+    render() {
         const {
             svg,
             maxArrName,
@@ -46,18 +77,22 @@ class Axis extends React.Component {
             .range([this.height, 0]);
 
         if (svg !== undefined) {
+
             this.g = svg.append("g")
+                .attr("class", "parent")
+                .attr("width", svgWidth)
                 .attr("transform", "translate(" + margin.right + ")")
             const lineAxisX = this.g.append("g")
                 .attr("class", "axis axis--x")
                 .attr("transform", "translate(0," + this.height + ")")
                 .call(d3.axisBottom(this.xAxis)
                     .ticks(16)
-                    .tickSize(3)
+                    .tickSize(-this.height)
                     .tickPadding(6))
                 .select(".domain")
                 .remove();
 
+            this.lineAxisX = lineAxisX;
             const lineAxisY = this.g.append("g")
                 .call(d3.axisLeft(this.yAxis)
                     .ticks(6)
@@ -67,15 +102,6 @@ class Axis extends React.Component {
                 .attr("class", "axis axis--y")
                 .select(".domain")
 
-            d3.selectAll("g.axis--x g.tick")
-                .append("line")
-                .classed("grid-line", true)
-                .attr("x1", 0)
-                .attr("y1", 0)
-                .attr("x2", 0)
-                .attr("y2", - (this.height));
-
-
             d3.selectAll("g.axis--y g.tick")
                 .append("line")
                 .classed("grid-line", true)
@@ -83,10 +109,16 @@ class Axis extends React.Component {
                 .attr("y1", 0)
                 .attr("x2", svgWidth)
                 .attr("y2", 0);
-        }
-    }
 
-    render() {
+            d3.select('.path').on("load", this.zoomFunction)
+            const zoomFunction = this.zoomFunction;
+            const zoom = d3.zoom()
+                .scaleExtent([0.75, 1000])
+                .on("zoom", zoomFunction);
+            svg.call(zoom);
+        }
+        console.log(this.new_xScale)
+
         return this.props.children
     }
 
@@ -100,8 +132,16 @@ class Axis extends React.Component {
         formattedDate: PropTypes.instanceOf(Array),
         yAxis: PropTypes.instanceOf(Object),
         xAxis: PropTypes.instanceOf(Object),
-        height: PropTypes.number
+        height: PropTypes.number,
+        lineAxisX: PropTypes.instanceOf(Object),
+        new_xScale: PropTypes.instanceOf(Object)
     }
 }
 
-export default Axis;
+function mapStateToProps(state) {
+    return {
+        activePositions: state.chartsInfo.activePositions,
+    }
+}
+
+export default connect(mapStateToProps)(Axis);

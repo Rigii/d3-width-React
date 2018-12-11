@@ -18,7 +18,6 @@ html, body {
 
 .axis--x .tick line {
     stroke: grey;
-    width: 10px;
     opacity: 0.5;
 
 }
@@ -75,4 +74,8 @@ div.tooltip {
       cursor: pointer;
       line-height: 2em
 
+  }
+
+  .axis--x{
+      overflow: hidden;
   }

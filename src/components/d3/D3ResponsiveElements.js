@@ -17,7 +17,7 @@ class D3ResponsiveElements extends Component {
             height,
             svg,
             xAxis,
-            yAxis } = this.context;
+            yAxis} = this.context;
 
         const parseTime = d3.timeParse('%Y-%m-%d %H:%M');``
         const bisectDate = d3.bisector(function (d) { return d; }).left;

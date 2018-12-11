@@ -13,9 +13,9 @@ class D3Components extends Component {
             <D3Container>
                 <D3Feld>
                     <Axis>
+                        {/*<D3ZoomMove />*/}
                         <D3RenderDataLines />
                         <D3ResponsiveElements />
-                        <D3ZoomMove />
                     </Axis>
                 </D3Feld>
             </D3Container >

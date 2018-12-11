@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import D3Line from './D3Line';
@@ -21,7 +20,11 @@ class D3RenderDataLines extends Component {
                 for (let n = 0; n < name.length; n++) {
                     key = key + name.charCodeAt(n)
                 }
-                return <D3Line key={key} name={name} lineProps={this.context} />
+
+                return (
+                    <div key={key}>
+                        <D3Line name={name} lineProps={this.context} />
+                    </div>)
             }
             if (isChartActive == -1) {
                 d3.select("path." + name).remove();
@@ -38,7 +41,10 @@ class D3RenderDataLines extends Component {
         g: PropTypes.instanceOf(Object),
         formattedDate: PropTypes.instanceOf(Array),
         yAxis: PropTypes.instanceOf(Object),
-        xAxis: PropTypes.instanceOf(Object)
+        xAxis: PropTypes.instanceOf(Object),
+        lineAxisX: PropTypes.instanceOf(Object),
+        height: PropTypes.number,
+        new_xScale: PropTypes.instanceOf(Object)
     }
 }
 
