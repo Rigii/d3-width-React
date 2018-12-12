@@ -23,10 +23,10 @@ class D3RenderDataLines extends Component {
 
                 return (
                     <div key={key}>
-                        <D3Line name={name} lineProps={this.context} />
+                        <D3Line name={name} lineProps={this.context} xAxis={this.props.xAxis} />
                     </div>)
             }
-            if (isChartActive == -1) {
+            if (isChartActive === -1) {
                 d3.select("path." + name).remove();
                 d3.selectAll("circle." + name).remove();
                 return null
@@ -51,6 +51,7 @@ class D3RenderDataLines extends Component {
 function mapStateToProps(state) {
     return {
         activePositions: state.chartsInfo.activePositions,
+        xAxis: state.chartsInfo.xAxis
     }
 }
 

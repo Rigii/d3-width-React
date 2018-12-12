@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import CheckBoxComponent from './CheckBoxComponent'
 
 function CheckBoxContainer(props) {
@@ -8,7 +8,7 @@ function CheckBoxContainer(props) {
         for (let n = 0; n < name.length; n++) {
             key = key + name.charCodeAt(n)
         }
-        if (name != 'timeStamp') return <CheckBoxComponent value={name} key={key} />
+        if (name !== 'timeStamp') return <CheckBoxComponent value={name} key={key} />
     });
 
 }

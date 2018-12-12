@@ -1,15 +1,3 @@
-function sortObj(obj) {
-    let newArr = [];
-    for (let i = 0; i < obj.timeStamp.length; i++) {
-        let newObj = {};
-        Object.keys(obj).map((key) => {
-            if (obj[key][i] !== undefined) newObj[key] = obj[key][i]
-        });
-        newArr.push(newObj)
-    }
-    return newArr;
-}
-
 export const getRandomColor = () => {
     let letters = '0123456789ABCDEF';
     let color = '#';
@@ -34,6 +22,18 @@ export const getDataFetch = (url) => {
 };
 
 /*
+function sortObj(obj) {
+    let newArr = [];
+    for (let i = 0; i < obj.timeStamp.length; i++) {
+        let newObj = {};
+        Object.keys(obj).map((key) => {
+            if (obj[key][i] !== undefined) newObj[key] = obj[key][i]
+        });
+        newArr.push(newObj)
+    }
+    return newArr;
+}
+
 xport const requests = (setting, pathname) =>
   fetch(`${window.location.origin + pathname}`, {
     ...setting,

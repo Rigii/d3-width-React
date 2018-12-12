@@ -28,7 +28,8 @@ class D3Container extends React.Component {
     }
 
     render() {
-        return Object.keys(this.chartsData).length === 0 ? null : this.props.children
+        const childrenProps = Object.keys(this.chartsData).length === 0 ? null : this.props.children
+        return childrenProps
     }
     static childContextTypes = {
         chartsData: PropTypes.instanceOf(Object),

@@ -53,7 +53,7 @@ function setData() {
 const initialState = {
   chartsInfo: setData(),
   activePositions: [],
-  lineProps: {}
+  xAxis: {}
 };
 
 export default handleActions(
@@ -62,19 +62,24 @@ export default handleActions(
       ...state,
       chartsInfo: state.chartsInfo.concat(action.payload),
     }),
-      GET_DATA_ERROR: (state, action) => ({
-          ...state
-      }),
+    GET_DATA_ERROR: (state, action) => ({
+      ...state
+    }),
     CHOOSE_ITEM: (state, action) => {
       let index = state.activePositions.indexOf(action.payload);
-      if (index == -1) {
+      if (index === -1) {
         return { ...state, activePositions: state.activePositions.concat(action.payload) }
       }
-      if (index != -1) {
+      if (index !== -1) {
         const newState = [...state.activePositions.slice(0, index), ...state.activePositions.slice(index + 1)];
         return { ...state, activePositions: newState }
       }
     },
+    XSCALE_FUNC: (state, action) => (
+      {
+        ...state,
+        xAxis: action.payload,
+      }),
   },
   initialState
 );

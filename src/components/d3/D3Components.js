@@ -4,7 +4,6 @@ import Axis from './Axis';
 import D3RenderDataLines from './D3RenderDataLines'
 import D3ResponsiveElements from './D3ResponsiveElements'
 import D3Container from './D3Container'
-import D3ZoomMove from './D3ZoomMove'
 
 class D3Components extends Component {
 
@@ -13,7 +12,6 @@ class D3Components extends Component {
             <D3Container>
                 <D3Feld>
                     <Axis>
-                        {/*<D3ZoomMove />*/}
                         <D3RenderDataLines />
                         <D3ResponsiveElements />
                     </Axis>

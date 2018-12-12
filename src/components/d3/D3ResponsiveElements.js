@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import * as d3 from "d3";
 import moment from 'moment';
 import PropTypes from 'prop-types'
 
-class D3ResponsiveElements extends Component {
+class D3ResponsiveElements extends React.Component {
 
     shouldComponentUpdate(nextProps) {
         if (nextProps !== this.props) return true
@@ -16,12 +16,12 @@ class D3ResponsiveElements extends Component {
             chartsData,
             height,
             svg,
-            xAxis,
-            yAxis} = this.context;
+            yAxis } = this.context;
 
-        const parseTime = d3.timeParse('%Y-%m-%d %H:%M');``
+        const parseTime = d3.timeParse('%Y-%m-%d %H:%M');
         const bisectDate = d3.bisector(function (d) { return d; }).left;
         const activePositions = this.props.activePositions;
+        const xAxis = this.props.xAxis;
 
         svg.on("mousemove", mousemove)
             .on("mouseout", function () {
@@ -43,7 +43,7 @@ class D3ResponsiveElements extends Component {
                 svg.selectAll("dot")
                     .data([chartsData[key][n]])
                     .enter().append("circle")
-                    .attr("transform", "translate(" + 20 + ")") //??
+                    .attr("transform", "translate(" + 20 + ")")
                     .attr("r", 3)
                     .attr("class", key)
                     .attr("fill", "white")
@@ -60,7 +60,7 @@ class D3ResponsiveElements extends Component {
                 d3.selectAll("line.lineVertical").remove();
                 svg.append("line")
                     .attr("class", 'lineVertical')
-                    .attr("transform", "translate(" + 20 + ")") //??
+                    .attr("transform", "translate(" + 20 + ")")
                     .attr("x1", xAxis(parseTime(formattedDate[n])))
                     .attr("y1", 0)
                     .attr("x2", xAxis(parseTime(formattedDate[n])))
@@ -104,6 +104,7 @@ class D3ResponsiveElements extends Component {
 function mapStateToProps(state) {
     return {
         activePositions: state.chartsInfo.activePositions,
+        xAxis: state.chartsInfo.xAxis
     }
 }
 
