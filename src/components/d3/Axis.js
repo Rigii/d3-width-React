@@ -10,10 +10,11 @@ class Axis extends React.Component {
         super()
         this.zoomFunction = this.zoomFunction.bind(this)
     }
+    /*
     shouldComponentUpdate(nextProps) {
         if (nextProps !== this.props) return true
     }
-
+*/
     getChildContext() {
         return {
             g: this.g,
@@ -38,12 +39,8 @@ class Axis extends React.Component {
 
         this.g.select(".axis--x").call(d3.axisBottom(this.xAxis).scale(new_xScale).ticks(16).tickSize(-this.height).tickPadding(6))
         this.g.selectAll(".line").attr("d", newLine)
-        this.new_xScale = new_xScale
+       // this.new_xScale = new_xScale
   
-    }
-
-    componentWillMount() {
-        
     }
 
     render() {
@@ -138,10 +135,5 @@ class Axis extends React.Component {
     }
 }
 
-function mapStateToProps(state) {
-    return {
-        activePositions: state.chartsInfo.activePositions,
-    }
-}
 
-export default connect(mapStateToProps)(Axis);
+export default Axis;
