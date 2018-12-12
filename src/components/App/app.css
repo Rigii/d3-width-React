@@ -1,14 +1,17 @@
 
-
 html, body {
     margin: 0;
     padding: 0;
 }
 
-.gist{
-    
+.gist{  
     overflow: hidden;
     margin-left: 30px;
+    cursor: grab
+}
+
+.gist:active {
+    cursor: grabbing
 }
 
 .axis--x .domain {
