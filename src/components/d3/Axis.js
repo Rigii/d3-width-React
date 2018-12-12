@@ -28,6 +28,10 @@ class Axis extends React.Component {
     }
 
     zoomFunction() {
+        d3.selectAll("circle").remove();
+        d3.selectAll("line.lineVertical").remove();
+        d3.selectAll(".tooltip").remove();
+
         const parseTime = d3.timeParse('%Y-%m-%d %H:%M');
         const { formattedDate, yAxis } = this
         let new_xScale = d3.event.transform.rescaleX(this.xAxis);
