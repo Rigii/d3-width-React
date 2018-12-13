@@ -9,10 +9,7 @@ import * as actionCreators from '../../actions/PageActions.js'
 class Axis extends React.Component {
 
     constructor() {
-        super()
-        this.state = {
-            xAxis: {}
-        }
+        super();
         this.zoomFunction = this.zoomFunction.bind(this)
     }
 
@@ -37,21 +34,20 @@ class Axis extends React.Component {
         let new_xScale = d3.event.transform.rescaleX(this.xAxis);
         new_xScale.range([0, this.width]);
 
-        this.setState({ xAxis: new_xScale })
         this.props.xAxisFunc(new_xScale)
 
         let newLine = d3.line()
             .defined(function (d, i) { return formattedDate[i] !== 0; })
             .x(function (d, i) { return new_xScale(parseTime(formattedDate[i])) })
             .y(function (d) { return yAxis(d) });
+        this.g.selectAll(".line").attr("d", newLine).attr("clip-path", "url(#clip)")
 
         this.g.select(".axis--x")
                 .call(d3.axisBottom(this.xAxis)
                 .scale(new_xScale).ticks(16)
                 .tickSize(-this.height)
                 .tickPadding(6))
-        this.g.selectAll(".line").attr("d", newLine).attr("clip-path", "url(#clip)")
-
+        
     }
 
     componentWillMount() {
@@ -69,11 +65,12 @@ class Axis extends React.Component {
         this.height = svgHeight - margin.bottom;
         const parseTime = d3.timeParse('%Y-%m-%d %H:%M');
         const formattedDate = [];
+
         chartsData.timeStamp.map(function (d) {
             const formatted = moment.unix(d).format("YYYY-MM-DD HH:mm");
-
             formattedDate.push(formatted)
         });
+
         this.formattedDate = formattedDate;
         this.xAxis = d3.scaleTime()
             .domain(d3.extent(formattedDate.map(function (d) {
@@ -81,7 +78,6 @@ class Axis extends React.Component {
             })))
             .range([0, width]);
 
-        this.setState({ xAxis: this.xAxis })
         this.props.xAxisFunc(this.xAxis)
 
         this.yAxis = d3.scaleLinear()
@@ -129,7 +125,6 @@ class Axis extends React.Component {
                 .attr("y1", 0)
                 .attr("x2", svgWidth)
                 .attr("y2", 0);
-
 
             d3.select('.path').on("load", this.zoomFunction)
             const zoomFunction = this.zoomFunction;

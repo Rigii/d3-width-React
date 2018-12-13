@@ -6,6 +6,10 @@ import PropTypes from 'prop-types'
 
 class D3RenderDataLines extends Component {
 
+    shouldComponentUpdate(nextProps) {
+        if (nextProps !== this.props) return true
+    }
+
     componentWillReceiveProps() {
         this.prevActiveLines = this.props.activePositions;
     }
@@ -20,7 +24,6 @@ class D3RenderDataLines extends Component {
                 for (let n = 0; n < name.length; n++) {
                     key = key + name.charCodeAt(n)
                 }
-
                 return (
                     <div key={key}>
                         <D3Line name={name} lineProps={this.context} xAxis={this.props.xAxis} />
