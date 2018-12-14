@@ -7,25 +7,19 @@ import PropTypes from 'prop-types'
 class D3ResponsiveElements extends React.Component {
     constructor(props) {
         super()
-        this.mousemove = this.mousemove.bind(this);
+        this.replacePointerElements = this.replacePointerElements.bind(this);
     }
 
     shouldComponentUpdate(nextProps) {
         if (nextProps !== this.props) return true
     }
 
-    mousemove() {
-        const {
-            formattedDate,
-            chartsData,
-            height,
-            svg,
-            yAxis } = this.context;
-
+    replacePointerElements() {
+        const { formattedDate, height, yAxis, xAxis } = this.props.childProps;   
+        const { svg, chartsData} = this.context
         const parseTime = d3.timeParse('%Y-%m-%d %H:%M');
         const bisectDate = d3.bisector(function (d) { return d; }).left;
         const activePositions = this.props.activePositions;
-        const xAxis = this.props.xAxis;
 
         let containerSVG = document.getElementById('line-chart')
         const scaletime = moment(xAxis.invert(d3.mouse(containerSVG)[0])).format("X"),
@@ -86,8 +80,8 @@ class D3ResponsiveElements extends React.Component {
     }
 
     render() {
-        let mousemove = this.mousemove
-        this.context.svg.on("mousemove", mousemove)
+        let replacePointerElements = this.replacePointerElements
+        this.context.svg.on("mousemove", replacePointerElements)
             .on("mouseout", function () {
                 d3.selectAll("circle").remove();
                 d3.selectAll("line.lineVertical").remove();
@@ -98,13 +92,7 @@ class D3ResponsiveElements extends React.Component {
     }
     static contextTypes = {
         svg: PropTypes.instanceOf(Object),
-        maxArrName: PropTypes.string,
         chartsData: PropTypes.instanceOf(Object),
-        g: PropTypes.instanceOf(Object),
-        formattedDate: PropTypes.instanceOf(Array),
-        yAxis: PropTypes.instanceOf(Object),
-        xAxis: PropTypes.instanceOf(Object),
-        height: PropTypes.number
     }
 }
 

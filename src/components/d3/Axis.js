@@ -2,26 +2,17 @@ import React from 'react'
 import * as d3 from "d3";
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux'
-import * as actionCreators from '../../actions/PageActions.js'
+import D3ResponsiveElements from './D3ResponsiveElements'
+import D3RenderDataLines from './D3RenderDataLines'
 
 class Axis extends React.Component {
 
     constructor() {
         super();
         this.zoomFunction = this.zoomFunction.bind(this)
-    }
-
-    getChildContext() {
-        return {
-            g: this.g,
-            formattedDate: this.formattedDate,
-            yAxis: this.yAxis,
-            height: this.height,
-            lineAxisX: this.lineAxisX,
-            new_xScale: this.new_xScale
-        };
+        this.state = {
+            xAxis: {}
+        }
     }
 
     zoomFunction() {
@@ -31,10 +22,9 @@ class Axis extends React.Component {
 
         const parseTime = d3.timeParse('%Y-%m-%d %H:%M');
         const { formattedDate, yAxis } = this
-        let new_xScale = d3.event.transform.rescaleX(this.xAxis);
+        const xAxis = this.state.xAxis
+        let new_xScale = d3.event.transform.rescaleX(xAxis);
         new_xScale.range([0, this.width]);
-
-        this.props.xAxisFunc(new_xScale)
 
         let newLine = d3.line()
             .defined(function (d, i) { return formattedDate[i] !== 0; })
@@ -43,11 +33,11 @@ class Axis extends React.Component {
         this.g.selectAll(".line").attr("d", newLine).attr("clip-path", "url(#clip)")
 
         this.g.select(".axis--x")
-                .call(d3.axisBottom(this.xAxis)
+            .call(d3.axisBottom(xAxis)
                 .scale(new_xScale).ticks(16)
                 .tickSize(-this.height)
                 .tickPadding(6))
-        
+        this.xAxis = new_xScale
     }
 
     componentWillMount() {
@@ -61,8 +51,7 @@ class Axis extends React.Component {
             svgHeight = window.innerHeight - 200;
         const margin = { right: 20, bottom: 20 };
         const width = svgWidth - margin.right;
-        this.width = width;
-        this.height = svgHeight - margin.bottom;
+
         const parseTime = d3.timeParse('%Y-%m-%d %H:%M');
         const formattedDate = [];
 
@@ -71,23 +60,25 @@ class Axis extends React.Component {
             formattedDate.push(formatted)
         });
 
-        this.formattedDate = formattedDate;
-        this.xAxis = d3.scaleTime()
+        const xAxis = d3.scaleTime()
             .domain(d3.extent(formattedDate.map(function (d) {
                 return parseTime(d)
             })))
             .range([0, width]);
 
-        this.props.xAxisFunc(this.xAxis)
-
+        this.formattedDate = formattedDate;
+        this.width = width;
+        this.height = svgHeight - margin.bottom;
+        this.xAxis = xAxis;
         this.yAxis = d3.scaleLinear()
             .domain(d3.extent(chartsData[maxArrName].map(function (d) {
                 return d
             })))
             .range([this.height, 0]);
-
+        
+        this.setState({ xAxis: xAxis })
+        
         if (svg !== undefined) {
-
             this.g = svg.append("g")
                 .attr("class", "parent")
                 .attr("width", svgWidth)
@@ -126,18 +117,22 @@ class Axis extends React.Component {
                 .attr("x2", svgWidth)
                 .attr("y2", 0);
 
-            d3.select('.path').on("load", this.zoomFunction)
+         //   d3.select('.path').on("load", this.zoomFunction)
             const zoomFunction = this.zoomFunction;
             const zoom = d3.zoom()
                 .scaleExtent([0.75, 1000])
                 .on("zoom", zoomFunction);
             svg.call(zoom);
         }
-
     }
 
     render() {
-        return this.props.children
+        return (
+            <div>
+                <D3RenderDataLines childProps={this} />
+                <D3ResponsiveElements childProps={this} />
+            </div>
+        )
     }
 
     static contextTypes = {
@@ -145,21 +140,7 @@ class Axis extends React.Component {
         maxArrName: PropTypes.string,
         chartsData: PropTypes.instanceOf(Object),
     }
-    static childContextTypes = {
-        g: PropTypes.instanceOf(Object),
-        formattedDate: PropTypes.instanceOf(Array),
-        yAxis: PropTypes.instanceOf(Object),
-        xAxis: PropTypes.instanceOf(Object),
-        height: PropTypes.number,
-        lineAxisX: PropTypes.instanceOf(Object),
-        new_xScale: PropTypes.instanceOf(Object)
-    }
 }
 
-function mapDispatchToProps(dispatch) {
-    return {
-        xAxisFunc: bindActionCreators(actionCreators.xAxisFunc, dispatch)
-    }
-}
 
-export default connect(null, mapDispatchToProps)(Axis);
+export default Axis;

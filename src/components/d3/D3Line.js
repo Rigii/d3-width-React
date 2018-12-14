@@ -6,11 +6,10 @@ class D3Line extends React.Component {
 
     render() {
         const {
-            chartsData,
+            xAxis,
             formattedDate,
             yAxis, g } = this.props.lineProps;
-
-        const xAxis = this.props.xAxis;
+        const chartsData = this.props.chartsData
         const parseTime = d3.timeParse('%Y-%m-%d %H:%M');
         const key = this.props.name;
 
@@ -25,7 +24,8 @@ class D3Line extends React.Component {
             .attr("fill", "none")
             .attr("stroke", elColor)
             .attr("stroke-width", 1.5)
-            .attr("d", line);
+            .attr("d", line)
+            .attr("clip-path", "url(#clip)")
 
         return null
     }

@@ -53,18 +53,3 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(RequestSelectionData)
-
-
-//export default RequestSelectionData
-
-/*
-@connect(
-    ({ state }) => ({
-        chartsInfo: state.chartsInfo.chartsInfo,
-        activePositons: state.chartsInfo.activePositons,
-    }),
-    dispatch => ({
-        getData: () => dispatch(actions.getData()),
-    }),
-)
-*/
