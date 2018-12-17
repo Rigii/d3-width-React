@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 
 class D3Feld extends React.Component {
     constructor() {
-        super()
+        super();
         this.state = {
             isMount: false
         }
@@ -15,7 +15,7 @@ class D3Feld extends React.Component {
     }
 
     componentDidMount() {
-        d3.selectAll("path.line").remove();
+        //d3.selectAll("path.line").remove();
 
         const svgWidth = window.innerWidth - 100,
             svgHeight = window.innerHeight;

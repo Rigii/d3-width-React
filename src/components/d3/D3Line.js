@@ -25,7 +25,7 @@ class D3Line extends React.Component {
             .attr("stroke", elColor)
             .attr("stroke-width", 1.5)
             .attr("d", line)
-            .attr("clip-path", "url(#clip)")
+            .attr("clip-path", "url(#clip)");
 
         return null
     }

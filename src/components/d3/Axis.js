@@ -9,7 +9,7 @@ class Axis extends React.Component {
 
     constructor() {
         super();
-        this.zoomFunction = this.zoomFunction.bind(this)
+        this.zoomFunction = this.zoomFunction.bind(this);
         this.state = {
             xAxis: {}
         }
@@ -21,8 +21,8 @@ class Axis extends React.Component {
         d3.selectAll(".tooltip").remove();
 
         const parseTime = d3.timeParse('%Y-%m-%d %H:%M');
-        const { formattedDate, yAxis } = this
-        const xAxis = this.state.xAxis
+        const { formattedDate, yAxis } = this;
+        const xAxis = this.state.xAxis;
         let new_xScale = d3.event.transform.rescaleX(xAxis);
         new_xScale.range([0, this.width]);
 
@@ -30,13 +30,13 @@ class Axis extends React.Component {
             .defined(function (d, i) { return formattedDate[i] !== 0; })
             .x(function (d, i) { return new_xScale(parseTime(formattedDate[i])) })
             .y(function (d) { return yAxis(d) });
-        this.g.selectAll(".line").attr("d", newLine).attr("clip-path", "url(#clip)")
+        this.g.selectAll(".line").attr("d", newLine).attr("clip-path", "url(#clip)");
 
         this.g.select(".axis--x")
             .call(d3.axisBottom(xAxis)
                 .scale(new_xScale).ticks(16)
                 .tickSize(-this.height)
-                .tickPadding(6))
+                .tickPadding(6));
         this.xAxis = new_xScale
     }
 
@@ -48,7 +48,7 @@ class Axis extends React.Component {
         } = this.context;
 
         const svgWidth = window.innerWidth - 100,
-            svgHeight = window.innerHeight - 200;
+              svgHeight = window.innerHeight - 200;
         const margin = { right: 20, bottom: 20 };
         const width = svgWidth - margin.right;
 
@@ -76,13 +76,13 @@ class Axis extends React.Component {
             })))
             .range([this.height, 0]);
         
-        this.setState({ xAxis: xAxis })
+        this.setState({ xAxis: xAxis });
         
         if (svg !== undefined) {
             this.g = svg.append("g")
                 .attr("class", "parent")
                 .attr("width", svgWidth)
-                .attr("transform", "translate(" + margin.right + ")")
+                .attr("transform", "translate(" + margin.right + ")");
 
             svg.append("defs").append("clipPath")
                 .attr("id", "clip")
@@ -107,7 +107,7 @@ class Axis extends React.Component {
                     .tickPadding(6)
                 )
                 .attr("class", "axis axis--y")
-                .select(".domain")
+                .select(".domain");
 
             d3.selectAll("g.axis--y g.tick")
                 .append("line")

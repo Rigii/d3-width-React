@@ -28,14 +28,14 @@ class D3Container extends React.Component {
             }
         });
         
-        this.maxArrName = maxName
+        this.maxArrName = maxName // определили мамый длинный объект, по нему будет размечатся ось У
     }
 
     render() {
         const childrenProps = Object.keys(this.chartsData).length === 0 ? null :
             <D3Feld>
                 <Axis/>
-            </D3Feld>
+            </D3Feld>;
         
         return childrenProps
     }

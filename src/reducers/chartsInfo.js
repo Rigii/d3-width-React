@@ -52,8 +52,7 @@ function setData() {
 
 const initialState = {
   chartsInfo: setData(),
-  activePositions: [],
-  xAxis: {}
+  activePositions: []
 };
 
 export default handleActions(
@@ -75,11 +74,6 @@ export default handleActions(
         return { ...state, activePositions: newState }
       }
     },
-    XSCALE_FUNC: (state, action) => (
-      {
-        ...state,
-        xAxis: action.payload,
-      }),
   },
   initialState
 );
