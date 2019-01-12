@@ -5,14 +5,20 @@ import { CHOOSE_ITEM } from '../constants/Const.js'
 import { getDataFetch } from '../components/helpers/helpers.js'
 
 export const getData = (url) => {
-    if (getDataFetch(url) !== undefined) {
-        return {
-            type: GET_DATA,
-            payload: getDataFetch('../components/helpers/JSONChartsData.json')
-        }
-    }
-    return {
-        type: GET_DATA_ERROR
+    return function (dispatch) {
+        return getDataFetch(url).then(function (data) {
+            dispatch ({
+                type: GET_DATA,
+                payload: data
+            })})
+            .catch(
+                ((reject) => {
+                    console.log('fail to load ' + reject);
+                    dispatch ({
+                        type: GET_DATA_ERROR
+                    })
+                })
+            );
     }
 };
 
@@ -21,7 +27,23 @@ export const chooseItems = createAction(
     item => item
 );
 
-
+/*
+return function (dispatch) {
+        return getDataFetch(url).then(function (data) {
+                dispatch ({
+                    type: GET_DATA,
+                    payload: data
+                })})
+            .catch(
+                ((reject) => {
+                    console.log('fail to load ' + reject);
+                    dispatch ({
+                        type: GET_DATA_ERROR
+                    })
+                })
+            );
+    }
+*/
 
 
 

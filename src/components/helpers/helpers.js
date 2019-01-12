@@ -8,17 +8,11 @@ export const getRandomColor = () => {
 };
 
 export const getDataFetch = (url) => {
-    fetch(url)
-        .then(function (response) {
-        //    let data = JSON.parse(response);
-            console.log(response);
-            return response;
-        })
-        .catch(
-            ((reject) => {
-                console.log('fail to load ' + reject.status);
+    return fetch(url)
+        .then(
+            function(response) {
+                return response.json()
             })
-        );
 };
 
 /*

@@ -27,7 +27,7 @@ class D3Container extends React.Component {
                 }
             }
         });
-        
+
         this.maxArrName = maxName // определили мамый длинный объект, по нему будет размечатся ось У
     }
 
@@ -36,7 +36,7 @@ class D3Container extends React.Component {
             <D3Feld>
                 <Axis/>
             </D3Feld>;
-        
+
         return childrenProps
     }
 
